@@ -51,4 +51,15 @@ public class TodoListController {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
     }
+
+    @PatchMapping("/complete/{todoId}")
+    public ResponseEntity<CommonResponseDto> checkComplete(@PathVariable Long todoId,
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            todoListService.checkComplete(todoId, userDetails);
+            return ResponseEntity.ok().body(new CommonResponseDto("할일카드 완료!", HttpStatus.OK.value()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
 }

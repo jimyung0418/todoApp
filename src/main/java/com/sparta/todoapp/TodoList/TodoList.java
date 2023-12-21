@@ -6,11 +6,9 @@ import com.sparta.todoapp.security.UserDetailsImpl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class TodoList extends TimeStamped {
 
@@ -22,7 +20,7 @@ public class TodoList extends TimeStamped {
 
     private String content;
 
-    private Boolean complete = false;
+    private Boolean complete;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,6 +30,7 @@ public class TodoList extends TimeStamped {
         this.title = todoListRequestDto.getTitle();
         this.content = todoListRequestDto.getContent();
         this.user = userDetails.getUser();
+        this.complete = false;
     }
 
     public TodoList update(TodoListRequestDto todoListRequestDto) {
@@ -39,5 +38,9 @@ public class TodoList extends TimeStamped {
         this.content = todoListRequestDto.getContent() == null ? this.getContent() : todoListRequestDto.getContent();
 
         return this;
+    }
+
+    public void completeTodoList() {
+        this.complete = true;
     }
 }

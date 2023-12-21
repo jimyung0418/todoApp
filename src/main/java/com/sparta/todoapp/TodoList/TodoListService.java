@@ -56,10 +56,28 @@ public class TodoListService {
         );
 
         if (!Objects.equals(todoList.getUser().getUserId(), userDetails.getUser().getUserId())) {
-            throw new IllegalArgumentException("작성자만 수정 가능합니다.");
+            throw new IllegalArgumentException("작성자만 수정 및 완료 가능합니다.");
         }
 
         TodoList updatedTodoList = todoList.update(todoListRequestDto);
         return new TodoListResponseDto(updatedTodoList);
+    }
+
+    @Transactional
+    public void checkComplete(Long todoId, UserDetailsImpl userDetails) {
+
+        TodoList todoList = todoListRepository.findById(todoId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 할일카드가 없습니다.")
+        );
+
+        if (!Objects.equals(todoList.getUser().getUserId(), userDetails.getUser().getUserId())) {
+            throw new IllegalArgumentException("작성자만 수정 및 완료 가능합니다.");
+        }
+
+        if (todoList.getComplete()) {
+            throw new IllegalArgumentException("이미 완료 처리 하였습니다.");
+        } else {
+            todoList.completeTodoList();
+        }
     }
 }
