@@ -40,4 +40,15 @@ public class TodoListController {
     public List<AllTodoListResponseDto> getAllTodoList() {
         return todoListService.getAllTodoList();
     }
+
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<CommonResponseDto> updateTodoList(@PathVariable Long todoId,
+                                                            @RequestBody TodoListRequestDto todoListRequestDto,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            return ResponseEntity.ok().body(todoListService.updateTodoList(todoId, todoListRequestDto, userDetails));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
 }

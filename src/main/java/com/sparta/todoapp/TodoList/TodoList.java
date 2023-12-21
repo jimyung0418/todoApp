@@ -33,4 +33,11 @@ public class TodoList extends TimeStamped {
         this.content = todoListRequestDto.getContent();
         this.user = userDetails.getUser();
     }
+
+    public TodoList update(TodoListRequestDto todoListRequestDto) {
+        this.title = todoListRequestDto.getTitle() == null ? this.getTitle() : todoListRequestDto.getTitle();
+        this.content = todoListRequestDto.getContent() == null ? this.getContent() : todoListRequestDto.getContent();
+
+        return this;
+    }
 }
