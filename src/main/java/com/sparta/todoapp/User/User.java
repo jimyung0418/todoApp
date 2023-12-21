@@ -1,11 +1,12 @@
 package com.sparta.todoapp.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.sparta.todoapp.TodoList.TodoList;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +20,9 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<TodoList> todoLists = new ArrayList<>();
 
     public User(UserRequestDto userRequestDto, String encodedPassword) {
         this.username = userRequestDto.getUsername();
