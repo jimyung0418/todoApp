@@ -23,4 +23,13 @@ public class TodoListService {
         TodoList savedTodoList = todoListRepository.save(todoList);
         return new TodoListResponseDto(savedTodoList);
     }
+
+    public CommonResponseDto getTodoList(Long todoId) {
+
+        TodoList todoList = todoListRepository.findById(todoId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 할일카드가 없습니다.")
+        );
+
+        return new TodoListResponseDto(todoList);
+    }
 }

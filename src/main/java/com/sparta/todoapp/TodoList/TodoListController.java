@@ -24,4 +24,13 @@ public class TodoListController {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
     }
+
+    @GetMapping("/{todoId}")
+    public ResponseEntity<CommonResponseDto> getTodoList(@PathVariable Long todoId) {
+        try {
+            return ResponseEntity.ok().body(todoListService.getTodoList(todoId));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
 }
