@@ -5,6 +5,9 @@ import com.sparta.todoapp.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TodoListService {
@@ -31,5 +34,15 @@ public class TodoListService {
         );
 
         return new TodoListResponseDto(todoList);
+    }
+
+    public List<AllTodoListResponseDto> getAllTodoList() {
+        List<TodoList> allTodoLists = todoListRepository.findAllByOrderByUserUsernameAscCreatedAtDesc();
+        List<AllTodoListResponseDto> response = new ArrayList<>();
+
+        for (TodoList todoList : allTodoLists) {
+            response.add(new AllTodoListResponseDto(todoList));
+        }
+        return response;
     }
 }

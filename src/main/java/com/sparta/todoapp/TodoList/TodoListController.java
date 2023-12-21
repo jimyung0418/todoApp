@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/todo-lists")
 @RequiredArgsConstructor
@@ -32,5 +34,10 @@ public class TodoListController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
+    }
+
+    @GetMapping
+    public List<AllTodoListResponseDto> getAllTodoList() {
+        return todoListService.getAllTodoList();
     }
 }

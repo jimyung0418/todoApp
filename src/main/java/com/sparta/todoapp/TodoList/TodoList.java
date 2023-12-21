@@ -6,9 +6,11 @@ import com.sparta.todoapp.security.UserDetailsImpl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class TodoList extends TimeStamped {
 
@@ -19,6 +21,8 @@ public class TodoList extends TimeStamped {
     private String title;
 
     private String content;
+
+    private Boolean complete = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
