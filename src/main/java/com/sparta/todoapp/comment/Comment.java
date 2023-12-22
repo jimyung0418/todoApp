@@ -32,4 +32,9 @@ public class Comment extends TimeStamped {
         this.todoList = todoList;
         this.user = userDetails.getUser();
     }
+
+    public Comment update(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent() == null ? this.getContent() : commentRequestDto.getContent();
+        return this;
+    }
 }

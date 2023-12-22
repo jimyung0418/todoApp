@@ -9,18 +9,29 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/todos")
+@RequestMapping("/api/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{todoId}/comments")
+    @PostMapping("/{todoId}")
     public ResponseEntity<CommonResponseDto> createComment(@PathVariable Long todoId,
                                                            @RequestBody CommentRequestDto commentRequestDto,
                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok().body(commentService.createComment(todoId, commentRequestDto, userDetails));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto> updateComment(@PathVariable Long commentId,
+                                                           @RequestBody CommentRequestDto commentRequestDto,
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            return ResponseEntity.ok().body(commentService.updateComment(commentId, commentRequestDto, userDetails));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
