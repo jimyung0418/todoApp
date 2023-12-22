@@ -2,10 +2,14 @@ package com.sparta.todoapp.TodoList;
 
 import com.sparta.todoapp.TimeStamped;
 import com.sparta.todoapp.User.User;
+import com.sparta.todoapp.comment.Comment;
 import com.sparta.todoapp.security.UserDetailsImpl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,7 +30,11 @@ public class TodoList extends TimeStamped {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "todoList")
+    private List<Comment> commentList = new ArrayList<>();
+
     public TodoList(TodoListRequestDto todoListRequestDto, UserDetailsImpl userDetails) {
+
         this.title = todoListRequestDto.getTitle();
         this.content = todoListRequestDto.getContent();
         this.user = userDetails.getUser();
