@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.IllformedLocaleException;
+
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
@@ -32,6 +34,17 @@ public class CommentController {
                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok().body(commentService.updateComment(commentId, commentRequestDto, userDetails));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto> deleteComment(@PathVariable Long commentId,
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            commentService.deleteComment(commentId, userDetails);
+            return ResponseEntity.ok().body(new CommonResponseDto("삭제 성공!", HttpStatus.OK.value()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }

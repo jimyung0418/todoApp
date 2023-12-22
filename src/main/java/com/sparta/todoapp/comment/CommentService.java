@@ -32,6 +32,17 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+        Comment comment = checkCommentAndUser(commentId, userDetails);
+        Comment updatedComment = comment.update(commentRequestDto);
+        return new CommentResponseDto(updatedComment);
+    }
+
+    public void deleteComment(Long commentId, UserDetailsImpl userDetails) {
+        Comment comment = checkCommentAndUser(commentId, userDetails);
+        commentRepository.delete(comment);
+    }
+
+    private Comment checkCommentAndUser(Long commentId, UserDetailsImpl userDetails) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 댓글이 없습니다.")
         );
@@ -39,8 +50,6 @@ public class CommentService {
         if (!Objects.equals(comment.getUser().getUserId(), userDetails.getUser().getUserId())) {
             throw new IllegalArgumentException("작성자만 수정 및 삭제 가능합니다.");
         }
-
-        Comment updatedComment = comment.update(commentRequestDto);
-        return new CommentResponseDto(updatedComment);
+        return comment;
     }
 }
